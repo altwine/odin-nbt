@@ -1,6 +1,5 @@
 package nbt
 
-import "base:intrinsics"
 import "base:runtime"
 import "vendor:zlib"
 import "core:encoding/base64"
@@ -55,20 +54,20 @@ buffer_write_be :: proc {
 }
 
 @(private)
-buffer_write_u16_be :: proc(buf: ^bytes.Buffer, value: u16) {
+buffer_write_u16_be :: #force_inline proc(buf: ^bytes.Buffer, value: u16) {
 	bytes.buffer_write_byte(buf, byte(value >> 8))
 	bytes.buffer_write_byte(buf, byte(value))
 }
 
 @(private)
-buffer_write_i16_be :: proc(buf: ^bytes.Buffer, value: i16) {
+buffer_write_i16_be :: #force_inline proc(buf: ^bytes.Buffer, value: i16) {
 	u := transmute(u16)value
 	bytes.buffer_write_byte(buf, byte(u >> 8))
 	bytes.buffer_write_byte(buf, byte(u))
 }
 
 @(private)
-buffer_write_i32_be :: proc(buf: ^bytes.Buffer, value: i32) {
+buffer_write_i32_be :: #force_inline proc(buf: ^bytes.Buffer, value: i32) {
 	u := transmute(u32)value
 	bytes.buffer_write_byte(buf, byte(u >> 24))
 	bytes.buffer_write_byte(buf, byte(u >> 16))
@@ -77,7 +76,7 @@ buffer_write_i32_be :: proc(buf: ^bytes.Buffer, value: i32) {
 }
 
 @(private)
-buffer_write_i64_be :: proc(buf: ^bytes.Buffer, value: i64) {
+buffer_write_i64_be :: #force_inline proc(buf: ^bytes.Buffer, value: i64) {
 	u := transmute(u64)value
 	bytes.buffer_write_byte(buf, byte(u >> 56))
 	bytes.buffer_write_byte(buf, byte(u >> 48))
@@ -90,7 +89,7 @@ buffer_write_i64_be :: proc(buf: ^bytes.Buffer, value: i64) {
 }
 
 @(private)
-buffer_write_f32_be :: proc(buf: ^bytes.Buffer, value: f32) {
+buffer_write_f32_be :: #force_inline proc(buf: ^bytes.Buffer, value: f32) {
 	u := transmute(u32)value
 	bytes.buffer_write_byte(buf, byte(u >> 24))
 	bytes.buffer_write_byte(buf, byte(u >> 16))
@@ -99,7 +98,7 @@ buffer_write_f32_be :: proc(buf: ^bytes.Buffer, value: f32) {
 }
 
 @(private)
-buffer_write_f64_be :: proc(buf: ^bytes.Buffer, value: f64) {
+buffer_write_f64_be :: #force_inline proc(buf: ^bytes.Buffer, value: f64) {
 	u := transmute(u64)value
 	bytes.buffer_write_byte(buf, byte(u >> 56))
 	bytes.buffer_write_byte(buf, byte(u >> 48))
@@ -112,17 +111,17 @@ buffer_write_f64_be :: proc(buf: ^bytes.Buffer, value: f64) {
 }
 
 @(private)
-buffer_write_string :: proc(buf: ^bytes.Buffer, value: string) {
+buffer_write_string :: #force_inline proc(buf: ^bytes.Buffer, value: string) {
 	bytes.buffer_write_string(buf, value)
 }
 
 @(private)
-buffer_write_byte :: proc(buf: ^bytes.Buffer, value: byte) {
+buffer_write_byte :: #force_inline proc(buf: ^bytes.Buffer, value: byte) {
 	bytes.buffer_write_byte(buf, value)
 }
 
 @(private)
-buffer_write_tag :: proc(buf: ^bytes.Buffer, value: Tag) {
+buffer_write_tag :: #force_inline proc(buf: ^bytes.Buffer, value: Tag) {
 	bytes.buffer_write_byte(buf, byte(value))
 }
 

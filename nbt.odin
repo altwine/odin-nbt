@@ -7,7 +7,6 @@ import "core:strings"
 import "core:bytes"
 import "core:mem"
 import "core:fmt"
-import "core:c"
 
 Tag :: enum {
 	End,
@@ -61,14 +60,14 @@ buffer_write_u16_be :: #force_inline proc(buf: ^bytes.Buffer, value: u16) {
 
 @(private)
 buffer_write_i16_be :: #force_inline proc(buf: ^bytes.Buffer, value: i16) {
-	u := transmute(u16)value
+	u := cast(u16)value
 	bytes.buffer_write_byte(buf, byte(u >> 8))
 	bytes.buffer_write_byte(buf, byte(u))
 }
 
 @(private)
 buffer_write_i32_be :: #force_inline proc(buf: ^bytes.Buffer, value: i32) {
-	u := transmute(u32)value
+	u := cast(u32)value
 	bytes.buffer_write_byte(buf, byte(u >> 24))
 	bytes.buffer_write_byte(buf, byte(u >> 16))
 	bytes.buffer_write_byte(buf, byte(u >> 8))
@@ -77,7 +76,7 @@ buffer_write_i32_be :: #force_inline proc(buf: ^bytes.Buffer, value: i32) {
 
 @(private)
 buffer_write_i64_be :: #force_inline proc(buf: ^bytes.Buffer, value: i64) {
-	u := transmute(u64)value
+	u := cast(u64)value
 	bytes.buffer_write_byte(buf, byte(u >> 56))
 	bytes.buffer_write_byte(buf, byte(u >> 48))
 	bytes.buffer_write_byte(buf, byte(u >> 40))
@@ -165,8 +164,8 @@ writer_to_base64 :: proc(w: ^Writer) -> string {
 	compressed := make([]byte, max_size, w.alloc)
 	defer delete(compressed)
 
-	s.next_in = cast(^zlib.Bytef)&data[0]
-	s.next_out = cast(^zlib.Bytef)&compressed[0]
+	s.next_in = &data[0]
+	s.next_out = &compressed[0]
 	s.avail_in = zlib.uInt(len(data))
 	s.avail_out = zlib.uInt(len(compressed))
 
